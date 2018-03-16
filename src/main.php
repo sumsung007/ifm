@@ -115,6 +115,9 @@ f00bar;
 		$templates['filetable'] = <<<'f00bar'
 @@@file:src/templates/filetable.html@@@
 f00bar;
+		$templates['gallery'] = <<<'f00bar'
+@@@file:src/templates/gallery.html@@@
+f00bar;
 		$templates['footer'] = <<<'f00bar'
 @@@file:src/templates/footer.html@@@
 f00bar;
@@ -313,7 +316,6 @@ f00bar;
 	/*
 	   api functions
 	 */
-
 
 	private function getFiles( $dir ) {
 		$this->chDirIfNecessary( $dir );

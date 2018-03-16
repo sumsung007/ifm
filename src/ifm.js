@@ -188,6 +188,15 @@ function IFM( params ) {
 		// save items to file cache
 		self.fileCache = data;
 
+		// gallery feature
+		if( data.filter( function(x){ if( x.icon.indexOf( 'file-image' ) != -1 ) return x; } ).length > 0 ) {
+			var rootIndex = data.findIndex( function(x){ if( x.fixtop == 100 ) return x; } );
+			data[rootIndex].button.push({
+				action: "gallery",
+				icon: "icon icon-file-image",
+				title: "gallery"
+			});
+		}
 
 		// build new tbody and replace the old one with the new
 		var newTBody = Mustache.render( self.templates.filetable, { items: data, config: self.config, i18n: self.i18n } );
@@ -253,6 +262,9 @@ function IFM( params ) {
 						break;
 					case "copymove":
 						self.showCopyMoveDialog( item );
+						break;
+					case "gallery":
+						self.showGallery();
 						break;
 				}
 			}
@@ -1057,7 +1069,7 @@ function IFM( params ) {
 			searchresults.tBodies[0].addEventListener( 'click', function( e ) {
 				if( e.target.classList.contains( 'searchitem' ) || e.target.parentElement.classList.contains( 'searchitem' ) ) {
 					e.preventDefault();
-					self.changeDirectory( self.pathCombine( self.search.data.currentDir, e.target.dataset.folder || e.target.parentElement.dataset.foldera ), { absolute: true } );
+					self.changeDirectory( self.pathCombine( self.search.data.currentDir, e.target.dataset.folder || e.target.parentElement.dataset.folder ), { absolute: true } );
 					self.hideModal();
 				}
 			});
@@ -1171,6 +1183,25 @@ function IFM( params ) {
 			complete: function() { self.task_done( id ); }
 		});
 	};
+
+	this.showGallery = function() {
+		var elIfmContainer = document.getElementById( "ifm_content" );
+		var elFiletableWrapper = document.getElementById( "filetable_wrapper" );
+		var images = self.fileCache
+			.filter( x => x.icon.indexOf( 'file-image' ) != -1 )
+			.map( function(x){
+				var item = {};
+				item.text = x.name;
+				if( self.config.isDocroot )
+					item.src = encodeURI( self.pathCombine( self.currentDir, x.name ) ).replace( '#', '%23' ).replace( '?', '%3F' );
+				else
+					item.src = self.api + "?api=proxy&dir=" + encodeURIComponent( self.currentDir ) + "&filename=" + encodeURIComponent( x.name );
+				return item;
+			});
+		var gall = Mustache.render( self.templates.gallery, { images: images } );
+		elFiletableWrapper.remove();
+		elIfmContainer.appendChild( self.getNodesFromString( gall ) );
+	}
 
 	// --------------------
 	// helper functions
