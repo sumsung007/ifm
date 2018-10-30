@@ -1608,6 +1608,13 @@ function IFM( params ) {
 						title: "edit"
 					});
 				}
+				if( self.inArray( item.ext, ["odt","odp","ods","pdf"] ) ) {
+					item.button.push({
+						action: "viewerjs",
+						icon: "icon icon-search",
+						title: "view"
+					});
+				}
 			}
 			if( ! self.inArray( item.name, [".", ".."] ) ) {
 				item.dragdrop = 'draggable="true"';
@@ -1700,6 +1707,9 @@ function IFM( params ) {
 						break;
 					case "copymove":
 						self.showCopyMoveDialog( item );
+						break;
+					case "viewerjs":
+						self.viewerJSPreview( item );
 						break;
 				}
 			}
@@ -2637,6 +2647,11 @@ function IFM( params ) {
 			complete: function() { self.task_done( id ); }
 		});
 	};
+
+	this.viewerJSPreview = function( item ) {
+		console.log( item );
+		self.showModal( '<iframe style="width:100%;min-height:'+(window.innerHeight*0.8)+'px" src="/ViewerJS/#/'+item.link+'" allowfullscreen webkitallowfullscreen></iframe>', { large: true } );
+	}
 
 	// --------------------
 	// helper functions
