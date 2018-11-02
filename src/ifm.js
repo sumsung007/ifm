@@ -1208,7 +1208,7 @@ function IFM( params ) {
 
 	this.viewerJSPreview = function( item ) {
 		console.log( item );
-		self.showModal( '<iframe style="width:100%;min-height:'+(window.innerHeight*0.8)+'px" src="/ViewerJS/#/'+item.link+'" allowfullscreen webkitallowfullscreen></iframe>', { large: true } );
+		self.showModal( '<iframe style="width:100%;min-height:'+(window.innerHeight*0.8)+'px" src="ViewerJS/#/'+item.link+'" allowfullscreen webkitallowfullscreen></iframe>', { large: true } );
 	}
 
 	// --------------------
